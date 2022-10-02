@@ -55,7 +55,10 @@ def get_pack_card_index(pack_code):
 
 def get_pack_data(pack_code):
     response = requests.request("GET", f"https://netrunnerdb.com/api/2.0/public/pack/{pack_code}")
-    return response.json()["data"][0]
+    try:
+        return response.json()["data"][0]
+    except IndexError as exc:
+        raise ValueError(f"no pack found with code '{pack_code}'") from exc
 
 
 def get_pack_duplicates(pack_code):
